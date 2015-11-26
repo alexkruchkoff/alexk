@@ -9,3 +9,10 @@ So for my environment the following directory should be created:
 
 mkdir ~/Library/VirtualBox/TFTP
 
+This directory should contain files like vmName.pxe PXE boot file for VM
+with the name vmName.
+
+When VM, lets say, cent, has System Boot Order property Network, and VM is
+being started the PXE bootloader will try to download cent.pxe file from
+this directory and transfer the control to it.
+
