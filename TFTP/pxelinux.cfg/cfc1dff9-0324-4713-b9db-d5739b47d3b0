@@ -1,0 +1,6 @@
+DEFAULT centos7
+
+LABEL centos7
+  KERNEL centos/7/os/x86_64/images/vmlinuz
+  APPEND initrd=centos/7/os/x86_64/images/initrd.img cgroup_disable=memory console=ttyS0 ignore_loglevel clocksource=acpi_pm crashkernel=64M@16M ks=http://10.0.2.2:80/install-scripts/cent7.ks ip=dhcp ksdevice=eth0 ramdisk_size=10000 ipv6.disable=1 biosdevnames=0 net.ifnames=0 unsupported_hardware text
+
