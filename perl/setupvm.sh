@@ -59,8 +59,8 @@ my $vm_re = '"([^"]*)" {([^}]*)}';
 
 for my $vm (@output) {
 	if ($vm =~ /$vm_re/) {
-	 $uuid{$1} = $2;	
-	 #print STDERR "$vm: name=\"$1\" uuid=\"$2\";\n" if $debug;
+		$uuid{$1} = $2;	
+		#print STDERR "$vm: name=\"$1\" uuid=\"$2\";\n" if $debug;
 	}
 	else { die "can not parse vm: $vm;\n" }
 }
@@ -71,3 +71,14 @@ if ($debug) {
 		print STDERR "$n\t$uuid{$n}\n";
 	}
 }
+
+if (exists $uuid{$name}) {
+	print STDERR "vm \"$name\" already exists\n" if $debug;
+	$command = "$VBoxManage showvminfo $name 2>&1";
+	($error, @output) = from $command;
+	die "got an error: $error " . join ("\n", @output) . ".\n" if $error;
+	for my $line (@output) {
+		print STDERR "\"$line\"\n" if $debug;
+	}
+}
+
