@@ -1,0 +1,17 @@
+; $Header: /Volumes/data/home/cvs/puppet/dns/var/named/ak.local,v 1.4 2015/12/07 11:42:12 alexk Exp $
+;	Authoritative data for ak.local domain 
+;
+$ORIGIN ak.local.
+$TTL 86400
+@		IN	SOA	cent.ak.local.	root.ak.local. (
+				2015120900	;Serial
+				3600	;Refresh 1 hour
+				1200	;Retry 20 minutes
+				2419200	;Expire 28 days
+				10800 )	;Minimum 3 hours
+		IN	NS	cent.ak.local.
+		IN	MX	10	cent.ak.local.
+cent	IN	A	192.168.2.11
+puppet	IN	CNAME	cent
+ento	IN	A	192.168.2.12
+;

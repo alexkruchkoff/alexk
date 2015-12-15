@@ -1,0 +1,15 @@
+; $Header: /Volumes/data/home/cvs/puppet/dns/var/named/2.168.192.in-addr.arpa,v 1.2 2015/12/07 03:39:39 alexk Exp $
+;	Authoritative data for 2.168.192-in-addr.arpa.
+;
+$ORIGIN 2.168.192.in-addr.arpa.
+$TTL 86400
+@		IN	SOA	cent.ak.local.	root.ak.local. (
+				2015120700	;Serial
+				3600	;Refresh 1 hour
+				1200	;Retry 20 minutes
+				2419200	;Expire 28 days
+				10800 )	;Minimum 3 hours
+		IN	NS	cent.ak.local.
+11	IN	PTR	cent.ak.local.
+12	IN	PTR	ento.ak.local.
+;
