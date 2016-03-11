@@ -16,6 +16,7 @@ GETENT=/usr/bin/getent
 AWK=/usr/bin/awk
 SED=/usr/bin/sed
 ID=/usr/bin/id
+GREP=/usr/bin/grep
 
 group1=$1;
 group2=$2;
@@ -33,9 +34,24 @@ group2info=`${GETENT} group "$group2"` || {
 	exit 4
 }
 
+gid1=`echo $group1info | ${AWK} -F: '{print $3}'`
+
+declare -A logins
+
+for u in  `${GETENT} passwd | ${AWK} -F: '{print $1 ":" $4}' | ${GREP} ":${gid1}$" |${AWK} -F: '{print $1}'`
+do
+	logins[$u]=1	
+done
+
+for u in `echo $group1info | ${AWK} -F: '{print $4}' | ${SED} -e 's|,| |g'`
+do
+	logins[$u]=1	
+done
+
+#echo and now logins are ${!logins[@]}
 echo processing users from the group \"$group1\"... >&2
 
-for user in `echo $group1info | ${AWK} -F: '{print $4}' | ${SED} -e 's|,| |g'`
+for user in ${!logins[@]}
 do
 	echo -n checking $user ... >&2
 	${ID} -a "$user" | grep "$group2" >/dev/null && echo $user alteady belongs to the group \"$group2\" >&2 || groupmems -a $user -g $group2
