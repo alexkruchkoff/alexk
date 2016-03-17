@@ -13,8 +13,13 @@ sub fromFile {
 sub toFile {
 	my ($file, $txt) = @_;
 	open(FILE, ">", "$file") or die "Can not write to \"$file\": $!\n";
-  prit FILE $txt;
+  print FILE "$txt\n";
 	close FILE;
+}
+
+sub repl {
+	my $txt = $_[0];
+	return $txt;
 }
 
 ($script = $0) =~ s/.*\///;
@@ -31,27 +36,34 @@ my ($file, $re, $from) = @ARGV;
 print STDERR "$script file=\"$file\" re=\'$re\' from=\"$from\"\n" if $debug;
 
 my $original = fromFile $file;
-print STDERR "original text: \"$original\".\n" if $debug;
+print STDERR "original text: \"$original\".\n\n" if $debug;
 
 my $txt = fromFile $from;
+my $fancy = "@@@@@@@@@@@@@@@@\n";
 
-print STDERR "replacing with text: \"$txt\".\n" if $debug;
+#print STDERR "replacing with text: \"$txt\".\n" if $debug;
 
 #if ($original =~ s|($re)|$txt\n|ms) {
-if ($original =~ s|($re)|$txt|ms) {
-	print STDERR "replacing \"$1\" with new text\n" if $debug;
+if ($original =~ s|($re)|$fancy|ms) {
+	print STDERR "replacing \"$1\" with new text \"$txt\"\n" if $debug;
 }
 else {
 	die "sorry can not find text in original file matching \'$re\'\n";
 }
 
-print STDERR "deleting other text matching \'$re\'\n" if $debug;
+#print STDERR "original became  \'$original\'\n\n" if $debug;
+
+#toFile $file, $original;
+
+#die ";^)\n";
 
 while ($original =~ s|($re)||ms) {
 	print STDERR "removing \"$1\"\n" if $debug;
 }
 
-print STDERR "new text \"$original\".\n" if $debug;
+print STDERR "new text \"$original\".\n\n" if $debug;
+
+$original =~ s|$fancy|$txt|ms;
 
 toFile $file, $original;
 
