@@ -1,3 +1,3 @@
 my $txt = <>;
-$txt =~ s/\m/\n/gms;
+$txt =~ s//\n/gms;
 print $txt;
