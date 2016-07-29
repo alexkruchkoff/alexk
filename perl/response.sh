@@ -94,16 +94,19 @@ LINE: for my $line (@lines) {
 
 		if(exists($calls{$resource})) {
 			$calls{$resource}++;
-			$minResponse{$resource} = $duration
-				if $duration < $minResponse{$resource};
 
-			$maxResponse{$resource} = $duration
-				if $duration > $maxResponse{$resource};
+			if($duration < $minResponse{$resource}) {
+				$minResponse{$resource} = $duration;
+				$minDT{$resource} = $timeStamp;
+			}
+
+			if($duration > $maxResponse{$resource}) {
+				$maxResponse{$resource} = $duration;
+				$maxDT{$resource} = $timeStamp;
+			}
 
 			$avgResponse{$resource} += $duration;
 
-			$minDT{$resource} = $timeStamp;
-			$maxDT{$resource} = $timeStamp;
 		}
 		else {
 			$calls{$resource} = 1;
