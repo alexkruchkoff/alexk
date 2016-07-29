@@ -2,6 +2,12 @@ use warnings;
 use Getopt::Std;
 (our $script = $0) =~ s/.*\///;
 
+sub microsecs {
+	my $mcs = $_[0];
+	my $str = "$mcs mcs";
+	return $str;
+}
+
 #0              1 2 3                     4      5     6     7             8         9   10   11    12                   13  14 
 #10.110.157.120 - - [08/Jul/2016:11:14:56 +1000] 48543 "POST /abra/cadabra HTTP/1.1" 200 1279 TLSv1 ECDHE-RSA-AES256-SHA "-" "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)" "0" "-"
 
@@ -126,9 +132,10 @@ LINE: for my $line (@lines) {
 for my $r (sort keys %calls) {
 	$bg = "bgcolor=\"#" . (($n++ % 2) ? "aaddff" : "ddeeff") . "\"";
 
-	print "<tr $bg><td>$r</td><td>$calls{$r}</td><td>$minResponse{$r}<br/>" .
-		"$minDT{$r}</td><td>$maxResponse{$r}<br>$maxDT{$r}</td><td>" .
-		$avgResponse{$r}/$calls{$r} .  "</td></tr>\n";
+	print "<tr $bg><td>$r</td><td>$calls{$r}</td><td>" .
+		microsecs($minResponse{$r}) . "<br/>$minDT{$r}</td><td>" .
+		microsecs($maxResponse{$r}) . "<br>$maxDT{$r}</td><td>" .
+		microsecs($avgResponse{$r}/$calls{$r}) . "</td></tr>\n";
 }
 
 print "</table>\n";
