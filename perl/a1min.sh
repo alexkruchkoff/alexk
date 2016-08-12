@@ -14,22 +14,25 @@ for my $line (@lines) {
 	my @fields = split / /, $line;
 	my $m1 = substr($fields[$datePos], 13, 5);
 	$duration = 0 + $fields[$durationPos];
+	my $code = $fields[$codePos];
 
-	if(exists($min{"$m1"})) {
-		if($duration < $min{"$m1"}) {
+	if ($code eq '200') { # success
+		if(exists($min{"$m1"})) {
+			if($duration < $min{"$m1"}) {
+				$min{"$m1"} = $duration;
+			}
+
+			if($duration > $max{"$m1"}) {
+				$max{"$m1"} = $duration;
+			}
+
+			$avg{"$m1"} += $duration;
+		}
+		else {
 			$min{"$m1"} = $duration;
-		}
-
-		if($duration > $max{"$m1"}) {
 			$max{"$m1"} = $duration;
+			$avg{"$m1"} = $duration;
 		}
-
-		$avg{"$m1"} += $duration;
-	}
-	else {
-		$min{"$m1"} = $duration;
-		$max{"$m1"} = $duration;
-		$avg{"$m1"} = $duration;
 	}
 	$codes{$fields[$codePos]} = 1;
   $lpm{"$m1"}++;
