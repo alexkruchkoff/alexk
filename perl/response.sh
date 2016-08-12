@@ -1,10 +1,49 @@
 use warnings;
 use Getopt::Std;
+use POSIX;
+
 (our $script = $0) =~ s/.*\///;
 
 sub microsecs {
 	my $mcs = $_[0];
-	my $str = "$mcs mcs";
+	my $ms = 1000;
+	my $sec = 1000000;
+	my $min = 60000000;
+	# μs ms s min
+
+	#print STDERR "INPUT \"$mcs\" μs\n";
+
+	my $str = '';
+
+	if ($mcs > $min) {
+		my $m = floor($mcs/$min);
+		$str .= "$m&nbsp;min&nbsp;";
+		$mcs -= $m * $min;
+
+		#print STDERR "$m min \"$mcs\" μs\n";
+	}
+
+	if ($mcs > $sec) {
+		my $s = floor($mcs/$sec);
+		$str .= "$s&nbsp;s&nbsp;";
+		$mcs -= $s * $sec;
+
+		#print STDERR "$s sec \"$mcs\" μs\n";
+	}
+
+	if ($mcs > $ms) {
+		my $mil = floor($mcs/$ms);
+		$str .= "$mil&nbsp;ms&nbsp;";
+		$mcs -= $mil * $ms ;
+
+		#print STDERR "$mil ms " . ($mil * $ms) . " \"$mcs\" μs\n";
+	}
+
+	$mcs = floor($mcs); # don't need fractions of microsecond
+
+	$str .= "$mcs&nbsp;μs";
+	#print STDERR "\"$mcs\" μs\n******************************************\n";
+
 	return $str;
 }
 
@@ -132,6 +171,7 @@ LINE: for my $line (@lines) {
 for my $r (sort keys %calls) {
 	$bg = "bgcolor=\"#" . (($n++ % 2) ? "aaddff" : "ddeeff") . "\"";
 
+	$total += $calls{$r};
 	print "<tr $bg><td>$r</td><td>$calls{$r}</td><td>" .
 		microsecs($minResponse{$r}) . "<br/>$minDT{$r}</td><td>" .
 		microsecs($maxResponse{$r}) . "<br>$maxDT{$r}</td><td>" .
@@ -139,4 +179,6 @@ for my $r (sort keys %calls) {
 }
 
 print "</table>\n";
+
+print "<b> Total Calls: $total</b>\n";
 
