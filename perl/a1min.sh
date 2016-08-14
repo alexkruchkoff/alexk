@@ -1,4 +1,7 @@
 use POSIX;
+# brew install st
+use lib "/usr/local/Cellar/st/1.1.2/libexec/lib/perl5/site_perl/";
+use App::st;
 
 #0              1 2 3                     4      5     6     7      8         9   10   11    12                   13  14 
 #10.110.157.120 - - [08/Jul/2016:11:14:56 +1000] 48543 "POST /b/c/d HTTP/1.1" 200 1279 TLSv1 ECDHE-RSA-AES256-SHA "-" "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)" "0" "-"
