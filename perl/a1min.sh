@@ -35,7 +35,7 @@ for my $line (@lines) {
 			$avg{"$m1"} += $duration;
 		}
 		else {
-			$st{"$m1"} = App::St->new();
+			$st{"$m1"} = App::St->new(format => '%d');
 
 			$min{"$m1"} = $duration;
 			$max{"$m1"} = $duration;
