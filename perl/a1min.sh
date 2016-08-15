@@ -11,7 +11,7 @@ my $durationPos = 5;
 my $duration;
 my $codePos = 9; 
 my $total = 0;
-my (%lpm, %codes, %lpmcode, %total, %min, %max, %avg) = ();
+my (%lpm, %codes, %lpmcode, %total, %st, %min, %max, %avg) = ();
 chomp(my @lines = <>);
 for my $line (@lines) {
 	my @fields = split / /, $line;
@@ -20,7 +20,10 @@ for my $line (@lines) {
 	my $code = $fields[$codePos];
 
 	if ($code eq '200') { # success
-		if(exists($min{"$m1"})) {
+		#if(exists($min{"$m1"})) {
+		if(exists($st{"$m1"})) {
+			$st{"$m1"}->process($duration);
+
 			if($duration < $min{"$m1"}) {
 				$min{"$m1"} = $duration;
 			}
@@ -32,6 +35,8 @@ for my $line (@lines) {
 			$avg{"$m1"} += $duration;
 		}
 		else {
+			$st{"$m1"} = App::St->new();
+
 			$min{"$m1"} = $duration;
 			$max{"$m1"} = $duration;
 			$avg{"$m1"} = $duration;
@@ -48,7 +53,7 @@ print "time\ttotal";
 for my $code (sort keys %codes) {
 	print "\t$code";
 }
-print "\tmin\tmax\tavg\n";
+print "\tmin\tmax\tavg\tmin\tmax\tmean\tstddev\n";
 
 for my $ten (sort keys %lpm) {
 	print "$ten\t$lpm{$ten}";
@@ -62,8 +67,11 @@ for my $ten (sort keys %lpm) {
 			print "\t0";
 		}	
 	}
-	print "\t" . $min{"$ten"} . "\t" . $max{"$ten"} . "\t" .
-	floor($avg{"$ten"}/$lpm{"$ten"}) . "\n";
+	print "\t" .  floor($avg{"$ten"}/$lpm{"$ten"}) . "\t" .
+		$st{"$ten"} -> min() . "\t" .
+		$st{"$ten"} -> max() . "\t" .
+		floor($st{"$ten"} -> mean()) . "\t" .
+		floor($st{"$ten"} -> stddev()) . "\n";
 }
 
 print "total\t$total";
