@@ -58,9 +58,9 @@ my $codePos = 9;
 
 my %args;
 my $usage = "usage:\t$script [ -d ] [ -h header ] [ -f YYYYMMDDHHMM ] " .
-	"[ -t YYYYMMDDHHMM ] \n";
+	"[ -t YYYYMMDDHHMM ] [ -c errorCode ] \n";
 
-die $usage unless getopts("df:h:t:", \%args);
+die $usage unless getopts("df:h:t:c:", \%args);
 
 my $debug = '';
 $debug = $args{'d'} if defined $args{'d'};
@@ -85,7 +85,10 @@ if(defined $args{'t'}) {
 }
 
 
-print STDERR "$header: from $from to $to\n" if $debug;
+my $errorCode = '200';
+$errorCode = $args{'c'} if defined $args{'c'};
+
+print STDERR "$header: from $from to $to for code $errorCode\n" if $debug;
 
 my @Mon = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 my %Mon;
@@ -126,7 +129,7 @@ LINE: for my $line (@lines) {
 		print STDERR "convertedDT=\"$convertedDT\" code=\"$code\"\n" if $debug;
 
 		next unless ($convertedDT >= $from and $convertedDT <= $to and
-			$code eq '200');
+			$code eq $errorCode);
 
 		$method = substr($fields[$methodPos],1);
 		$path = $fields[$pathPos];
