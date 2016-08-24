@@ -69,7 +69,7 @@ my $gnupl = indent <<"EOSPLOT";
 	set grid
 	set title "$title"
 	set xdata time
-	set timefmt "%H%M%S"
+	set timefmt "%Y%m%d%H%M%S"
 	set format x "%H:%M"
 	set ylabel "$ylabel"
 	plot "$file" using 1:$column with boxes lt $color
